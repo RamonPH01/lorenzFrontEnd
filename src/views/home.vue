@@ -1,35 +1,39 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import type { Event } from "../types/event";
+import axios from "axios";
 
-const events: Event[] = [
-    {
-        id: 1,
-        name: "Konzert am See",
-        numTickets: 100,
-        description: "Ein stimmungsvolles Konzert direkt am Wasser.",
-        hostId: 42,
-        picture: "/img/konzert.jpg",
-        availableDiets: ["vegetarisch", "vegan"],
-    },
-    {
-        id: 2,
-        name: "Food Festival",
-        numTickets: 250,
-        description: "Kulinarische Highlights aus aller Welt.",
-        hostId: 7,
-        picture: "/img/food.jpg",
-        availableDiets: ["vegan", "glutenfrei"],
-    },
-    {
-        id: 3,
-        name: "Tech Meetup",
-        numTickets: 80,
-        description: "Innovationen, Networking und Vorträge.",
-        hostId: 15,
-        picture: "/img/tech.jpg",
-        availableDiets: [],
-    },
-];
+const events = ref<Event[]>([]);
+const loading = ref(true);
+const error = ref<string | null>(null);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get<Event[]>("http://localhost:8080/event/get");
+    console.log(response.data);
+    events.value = mapEvents(response.data);
+    console.log(events.value);
+  } catch (err) {
+    error.value = "Fehler beim Laden der Events.";
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+});
+
+function mapEvents(rawEvents: any[]): any[] {
+  return rawEvents.map(event => ({
+    id: event.id,
+    name: event.name,
+    numTickets: event.numTickets,
+    description: event.description,
+    hostId: event.hostId ?? 1, // Default 1, falls nicht vorhanden
+    picture: event.picture || "",
+    availableDiets: event.availableDiets
+        ? event.availableDiets.split(",").map((diet: string) => diet.trim())
+        : [],
+  }));
+}
 </script>
 
 <template>

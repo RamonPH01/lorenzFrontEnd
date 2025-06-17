@@ -1,18 +1,39 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import type { Event } from "../types/event";
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
-const events = ref<Event[]>([
-    {
-        id: 1,
-        name: "Grillfest im Park",
-        numTickets: 100,
-        description: "Ein entspanntes Sommergrillen.",
-        hostId: 1,
-        picture: "",
-        availableDiets: ["vegetarisch"],
-    },
-]);
+const events = ref<Event[]>([]);
+const loading = ref(true);
+const error = ref<string | null>(null);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get<Event[]>("http://localhost:8080/event/get");
+    console.log(response.data);
+    events.value = mapEvents(response.data);
+    console.log(events.value);
+  } catch (err) {
+    error.value = "Fehler beim Laden der Events.";
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+});
+
+function mapEvents(rawEvents: any[]): any[] {
+  return rawEvents.map(event => ({
+    id: event.id,
+    name: event.name,
+    numTickets: event.numTickets,
+    description: event.description,
+    hostId: event.hostId ?? 1, // Default 1, falls nicht vorhanden
+    picture: event.picture || "",
+    availableDiets: event.availableDiets
+        ? event.availableDiets.split(",").map((diet: string) => diet.trim())
+        : [],
+  }));
+}
 
 const newEvent = ref<Omit<Event, "id">>({
     name: "",
