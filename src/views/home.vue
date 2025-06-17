@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Event } from "@/types/event";
+import type { Event } from "../types/event";
 
 const events: Event[] = [
     {
@@ -40,7 +40,7 @@ const events: Event[] = [
                 <h1 class="text-4xl text-[#5a2a27]">Eventübersicht</h1>
                 <router-link to="/veranstalter" class="no-underline">
                     <button
-                        class="bg-[#d64545] text-white px-5 py-2 rounded-xl hover:bg-[#b73737] transition"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition"
                     >
                         Für Veranstalter
                     </button>
