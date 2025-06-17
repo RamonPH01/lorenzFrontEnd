@@ -2,6 +2,18 @@
 import type { Event } from "../types/event";
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import VueSelect from "vue3-select-component";
+
+const dietOptions = [
+  { label: "Vegetarisch", value: "vegetarisch" },
+  { label: "Vegan", value: "vegan" },
+  { label: "Glutenfrei", value: "glutenfree" },
+  { label: "Laktosefrei", value: "lactosefree" },
+  { label: "Halal", value: "halal" },
+  { label: "Koscher", value: "koscher" },
+  { label: "Pescetarisch", value: "pescetarian" },
+  { label: "Keine besonderen Wünsche", value: "nothing" },
+];
 
 const events = ref<Event[]>([]);
 const loading = ref(true);
@@ -10,9 +22,7 @@ const error = ref<string | null>(null);
 onMounted(async () => {
   try {
     const response = await axios.get<Event[]>("http://localhost:8080/event/get");
-    console.log(response.data);
     events.value = mapEvents(response.data);
-    console.log(events.value);
   } catch (err) {
     error.value = "Fehler beim Laden der Events.";
     console.error(err);
@@ -27,7 +37,7 @@ function mapEvents(rawEvents: any[]): any[] {
     name: event.name,
     numTickets: event.numTickets,
     description: event.description,
-    hostId: event.hostId ?? 1, // Default 1, falls nicht vorhanden
+    hostId: event.hostId ?? 1,
     picture: event.picture || "",
     availableDiets: event.availableDiets
         ? event.availableDiets.split(",").map((diet: string) => diet.trim())
@@ -36,33 +46,33 @@ function mapEvents(rawEvents: any[]): any[] {
 }
 
 const newEvent = ref<Omit<Event, "id">>({
+  name: "",
+  numTickets: 0,
+  description: "",
+  hostId: 1,
+  picture: "",
+  availableDiets: [],
+});
+
+const addEvent = () => {
+  const id = events.value.length + 1;
+  const diets = Array.isArray(newEvent.value.availableDiets)
+      ? newEvent.value.availableDiets
+      : newEvent.value.availableDiets
+          .toString()
+          .split(",")
+          .map((d) => d.trim())
+          .filter(Boolean);
+
+  events.value.push({ id, ...newEvent.value, availableDiets: diets });
+  newEvent.value = {
     name: "",
     numTickets: 0,
     description: "",
     hostId: 1,
     picture: "",
     availableDiets: [],
-});
-
-const addEvent = () => {
-    const id = events.value.length + 1;
-    const diets = Array.isArray(newEvent.value.availableDiets)
-        ? newEvent.value.availableDiets
-        : newEvent.value.availableDiets
-              .toString()
-              .split(",")
-              .map((d) => d.trim())
-              .filter(Boolean);
-
-    events.value.push({ id, ...newEvent.value, availableDiets: diets });
-    newEvent.value = {
-        name: "",
-        numTickets: 0,
-        description: "",
-        hostId: 1,
-        picture: "",
-        availableDiets: [],
-    };
+  };
 };
 </script>
 
@@ -99,11 +109,12 @@ const addEvent = () => {
                     placeholder="Bild-URL"
                     class="p-2 border rounded"
                 />
-                <input
+                <VueSelect
                     v-model="newEvent.availableDiets"
+                    :options="dietOptions"
                     type="text"
-                    placeholder="Diäten (Komma)"
-                    class="p-2 border rounded"
+                    placeholder="Diäten"
+                    class="border rounded"
                 />
                 <textarea
                     v-model="newEvent.description"
