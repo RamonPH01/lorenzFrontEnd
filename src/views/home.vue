@@ -37,14 +37,14 @@ function mapEvents(rawEvents: any[]): any[] {
 </script>
 
 <template>
-    <div class="font-mono">
-        <div class="min-h-screen bg-[#fdf6f0] p-6">
+    <div class="font-mono ">
+        <div class="min-h-screen bg-[#372c31] p-6">
             <!-- Header -->
             <header class="flex justify-between items-center mb-10">
-                <h1 class="text-4xl text-[#5a2a27]">Eventübersicht</h1>
+                <h1 class="text-5xl text-white">Eventübersicht</h1>
                 <router-link to="/host" class="no-underline">
                     <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition"
+                        class="bg-red-800 text-white px-4 py-2 rounded-lg shadow hover:bg-red-900 transition"
                     >
                         Für Veranstalter
                     </button>
@@ -57,7 +57,7 @@ function mapEvents(rawEvents: any[]): any[] {
                     v-for="event in events"
                     :key="event.id"
                     :to="`/event/${event.id}`"
-                    class="no-underline block bg-white shadow-md hover:shadow-lg rounded-2xl border border-[#f0eae4] p-5 transition"
+                    class="no-underline block bg-[#eacdb6] shadow-md hover:shadow-lg rounded-2xl border border-[#f0eae4] p-5 transition"
                 >
                     <img
                         :src="event.picture"
