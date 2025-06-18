@@ -80,12 +80,15 @@ function mapEvents(rawEvents: any[]): any[] {
               d="M282.091,62.627c-19.572,8.195-39.76,12.3-48.571,10.4-8.22-1.9-14.2-6.935-11.687-13.869,1.9-5.678,11.687-17.055,19.572-17.365,7.244-.306,15.129,4.111,1.876,21.448,18.622,3.467,35.033-1.876,46.7-6.935,5.368-2.826,9.145,5.678,5.368,8.195C260,88.159,236.652,106.471,212.381,128.87c9.142-4.418,23.346-3.8,36.909,12.919,12.919,16.1,23.015,15.464,35.011,5.368,3.158-2.517,3.158,3.777-.309,6.319-24.606,17.646-36.293,18.931-50.163,5.034-12.612-12.609-23.043-23.011-37.218-10.093-5.678,2.851-11.687-.616-7.885-3.777,0,0,58.357-54.58,93.365-82.013"
               transform="translate(398.799 88.848)" fill="url(#pattern)"></path>
         </svg>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-3xl hidden md:inline text-white whitespace-nowrap">
+          Eventübersicht
+        </h1>
         <router-link to="/host" class="no-underline">
           <button
               class="bg-red-800 text-white px-4 py-2 rounded-lg shadow hover:bg-red-900 transition"
           >
             <i class="fa-solid fa-user mr-2"></i>
-            Für Veranstalter
+            <span class="ml-2 hidden md:inline">Für Veranstalter</span>
           </button>
         </router-link>
       </header>
