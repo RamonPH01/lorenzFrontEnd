@@ -22,11 +22,14 @@ onMounted(async () => {
 });
 
 function mapEvents(rawEvents: any[]): any[] {
+  console.log(rawEvents);
   return rawEvents.map(event => ({
     id: event.id,
     name: event.name,
     numTickets: event.numTickets,
     description: event.description,
+    date: event.date,
+    price: event.price,
     hostId: event.hostId ?? 1, // Default 1, falls nicht vorhanden
     picture: event.picture || "",
     availableDiets: event.availableDiets
@@ -34,6 +37,20 @@ function mapEvents(rawEvents: any[]): any[] {
         : [],
   }));
 }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    // hole Tag, Monat, Jahr
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    // hole Stunden, Minuten
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    // baue den gewünschten String
+    return `${day}.${month}.${year} - ${hours}:${minutes} Uhr`;
+  }
+
 </script>
 
 <template>
@@ -56,11 +73,10 @@ function mapEvents(rawEvents: any[]): any[] {
             {{ event.name }}
           </h2>
           <p class="text-[#7a5c56] mb-1">
-            {{ event.description }}
+            {{ formatDate(event.date) }}
           </p>
           <p class="text-sm text-[#9a837a]">
-            {{ event.numTickets }} Tickets · Diäten:
-            {{ event.availableDiets.join(", ") || "Keine" }}
+            {{ event.price }} €
           </p>
         </router-link>
       </div>
