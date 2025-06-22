@@ -10,9 +10,7 @@ const error = ref<string | null>(null);
 onMounted(async () => {
   try {
     const response = await axios.get<Event[]>("http://localhost:8080/event/get");
-    console.log(response.data);
     events.value = mapEvents(response.data);
-    console.log(events.value);
   } catch (err) {
     error.value = "Fehler beim Laden der Events.";
     console.error(err);
@@ -22,7 +20,6 @@ onMounted(async () => {
 });
 
 function mapEvents(rawEvents: any[]): any[] {
-  console.log(rawEvents);
   return rawEvents.map(event => ({
     id: event.id,
     name: event.name,
@@ -47,7 +44,7 @@ function mapEvents(rawEvents: any[]): any[] {
     // hole Stunden, Minuten
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    // baue den gewünschten String
+    // baue den String
     return `${day}.${month}.${year} - ${hours}:${minutes} Uhr`;
   }
 

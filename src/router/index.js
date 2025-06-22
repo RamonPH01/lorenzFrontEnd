@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home.vue";
 import Host from "../views/host.vue";
 import Test from "../views/test.vue";
+import Event from "../views/event.vue";
 
 const routes = [
-  { path: "/", component: Home },
-  { path: "/host", component: Host },
-  { path: "/test", component: Test },
+  { path: "/", name: "home", component: Home },
+  { path: "/host", name: "host", component: Host },
+  { path: "/test", name: "test", component: Test },
+  { path: "/event/:id", name: "event", component: Event }
 ];
 
 const router = createRouter({
