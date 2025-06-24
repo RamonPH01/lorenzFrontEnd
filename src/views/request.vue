@@ -27,13 +27,13 @@ const isEmailValid = computed(() => {
                 <textarea
                     id="email"
                     v-model="email"
-                    class="rounded-xl border border-[#deb699] p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+                    class="rounded-xl border border-[#deb699] p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#eacdb6] outline outline-2 outline-[#4a2c2a] focus:outline-[#4a2c2a]"
                     placeholder="Ihre E-Mail"
                 ></textarea>
                 <textarea
                     id="message"
                     v-model="message"
-                    class="rounded-xl border border-[#deb699] p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+                    class="rounded-xl border border-[#deb699] p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#eacdb6] outline outline-2 outline-[#4a2c2a] focus:outline-[#4a2c2a]"
                     rows="4"
                     placeholder="Ihre Anfrage"
                 ></textarea>
