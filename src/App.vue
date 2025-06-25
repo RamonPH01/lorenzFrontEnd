@@ -1,8 +1,9 @@
 <template>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-  <div class="font-mono">
+  <div class="font-mono min-h-screen flex flex-col bg-[#eacdb6]">
     <Header/>
-    <router-view/>
+    <div class="flex-1">
+      <router-view/>
+    </div>
     <Footer/>
   </div>
 </template>
