@@ -58,15 +58,6 @@
                     </router-link>
                 </div>
             </div>
-            <span
-                class="text-3xl"
-                style="
-                    font-family: &quot;Dancing Script&quot;, cursive;
-                    color: #f1dcc9;
-                "
-            >
-                Lorenz
-            </span>
         </div>
         <h1
             class="absolute left-1/2 -translate-x-1/2 text-3xl hidden md:inline text-[#f1dcc9] whitespace-nowrap"
@@ -75,11 +66,15 @@
                 Eventübersicht
             </router-link>
         </h1>
+      <div class="absolute right-0 mr-5">
+        <Logo/>
+      </div>
     </header>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import Logo from "../assets/logo.vue";
 
 const dropdownOpen = ref(false);
 
