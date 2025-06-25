@@ -19,6 +19,15 @@ const events = ref<Event[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
+const now = new Date()
+const minDateTime = formatDateTime(now)
+
+const nextYear = new Date()
+nextYear.setFullYear(now.getFullYear() + 1)
+const maxDateTime = formatDateTime(nextYear)
+
+const datum = ref(minDateTime)
+
 onMounted(async () => {
     try {
         const response = await axios.get<Event[]>(
@@ -32,6 +41,16 @@ onMounted(async () => {
         loading.value = false;
     }
 });
+
+function formatDateTime(date) {
+  // Gibt YYYY-MM-DDTHH:MM zurück (z.B. 2025-06-25T13:45)
+  const yyyy = date.getFullYear()
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  const dd = String(date.getDate()).padStart(2, '0')
+  const hh = String(date.getHours()).padStart(2, '0')
+  const min = String(date.getMinutes()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}`
+}
 
 function mapEvents(rawEvents: any[]): any[] {
     return rawEvents.map((event) => ({
@@ -99,6 +118,7 @@ const addEvent = () => {
                     class="p-2 border rounded"
                     required
                 />
+                Ticketanzahl
                 <input
                     v-model="newEvent.numTickets"
                     type="number"
@@ -111,11 +131,20 @@ const addEvent = () => {
                     type="text"
                     placeholder="Bild-URL"
                     class="p-2 border rounded"
-                />
+                /> <!-- muss noch geändert werden zu einem Upload -->
+              Datum und Uhrzeit
+              <input
+                  id="datum"
+                  type="datetime-local"
+                  v-model="datum"
+                  :min="minDateTime"
+                  :max="maxDateTime"
+              >
                 <VueSelect
                     v-model="newEvent.availableDiets"
                     :options="dietOptions"
                     type="text"
+                    :is-multi="true"
                     placeholder="Diäten"
                     class="border rounded"
                 />
