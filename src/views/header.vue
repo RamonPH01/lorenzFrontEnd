@@ -24,6 +24,13 @@
               class="absolute left-0 mt-2 w-40 bg-[#d9b49c] shadow rounded-lg shadow-lg z-50"
           >
             <router-link
+                to="/"
+                class="block px-4 py-2 text-gray-800 hover:bg-[#c4a087] no-underline"
+                @click="closeDropdown"
+            >
+              Eventübersicht
+            </router-link>
+            <router-link
                 to="/host-login"
                 class="block px-4 py-2 text-gray-800 hover:bg-[#c4a087] no-underline"
                 @click="closeDropdown"

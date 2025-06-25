@@ -1,19 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from 'vue-router';
 
 const username = ref("");
 const password = ref("");
 const error = ref("");
+const router = useRouter();
 
 function handleLogin() {
-    // Placeholder for authentication logic
-    if (!username.value || !password.value) {
-        error.value = "Please enter both username and password.";
-        return;
-    }
-    // Add your authentication logic here
+  if (!username.value || !password.value) {
+    error.value = "Please enter both username and password.";
+    return;
+  }
+
+  if (username.value === "admin" && password.value === "admin") {
     error.value = "";
-    // On success, redirect to host page (example: use router.push)
+    router.push('/host'); // Weiterleitung auf /host
+    return;
+  }
+
+  error.value = "Invalid username or password.";
 }
 </script>
 
