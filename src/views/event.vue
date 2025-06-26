@@ -45,26 +45,48 @@ function formatDate(dateString: string) {
 </script>
 
 <template>
-  <div>
-    <h1>Event Details</h1>
-    <div v-if="loading">Lade Event...</div>
-    <div v-else-if="error">{{ error }}</div>
-    <div v-else-if="event">
-      <p><strong>ID:</strong> {{ event.id }}</p>
-      <p><strong>Name:</strong> {{ event.name }}</p>
-      <p><strong>Number of Tickets:</strong> {{ event.numTickets }}</p>
-      <p><strong>Description:</strong> {{ event.description }}</p>
-      <p><strong>Date:</strong> {{ formatDate(event.date) }}</p>
-      <p><strong>Price:</strong> {{ event.price }} €</p>
-      <p><strong>Host ID:</strong> {{ event.hostId }}</p>
-      <p><strong>Picture:</strong></p>
-      <img v-if="event.picture" :src="event.picture" alt="Event picture" style="max-width: 200px;" />
-      <p v-if="event.availableDiets && event.availableDiets.length > 0">
-        <strong>Available Diets:</strong> {{ event.availableDiets.join(', ') }}
-      </p>
-    </div>
-    <div v-else>
-      <p>Kein Event gefunden.</p>
+  <div class="font-mono">
+    <div class="bg-[#eacdb6] p-2 flex justify-center items-center">
+      <div class="bg-[#d9b49c] rounded-2xl shadow-lg border border-[#deb699] p-8 max-w-xl w-full">
+        <h1 class="text-3xl font-bold text-[#4a2c2a] mb-6">Event Details</h1>
+        <div v-if="loading" class="text-[#7a5c56] mb-4">Lade Event...</div>
+        <div v-else-if="error" class="text-red-600 mb-4">{{ error }}</div>
+        <div v-else-if="event">
+          <div class="mb-4">
+            <img
+                v-if="event.picture"
+                :src="event.picture"
+                alt="Eventbild"
+                class="rounded-xl mb-4 h-52 w-full object-cover"
+            />
+            <p class="mb-1"><strong>Name:</strong> {{ event.name }}</p>
+            <p class="mb-1"><strong>ID:</strong> {{ event.id }}</p>
+            <p class="mb-1"><strong>Tickets:</strong> {{ event.numTickets }}</p>
+            <p class="mb-1"><strong>Datum:</strong> {{ formatDate(event.date) }}</p>
+            <p class="mb-1"><strong>Preis:</strong> {{ event.price }} €</p>
+            <p class="mb-1"><strong>Host:</strong> {{ event.hostId }}</p>
+            <p class="mb-4"><strong>Beschreibung:</strong><br />{{ event.description }}</p>
+
+            <!-- Ernährungsoptionen Dropdown -->
+            <div v-if="event.availableDiets && event.availableDiets.length > 0" class="mb-4">
+              <label for="diets" class="block mb-2 font-semibold text-[#4a2c2a]">Verfügbare Ernährungsoptionen:</label>
+              <select
+                  id="diets"
+                  v-model="selectedDiet"
+                  class="block w-full rounded-xl border border-[#deb699] px-4 py-2 bg-[#eacdb6] text-[#4a2c2a] focus:outline-none focus:ring-2 focus:ring-[#deb699]"
+              >
+                <option v-for="diet in event.availableDiets" :key="diet" :value="diet">
+                  {{ diet }}
+                </option>
+              </select>
+              <p v-if="selectedDiet" class="mt-2 text-[#7a5c56]">Ausgewählt: <strong>{{ selectedDiet }}</strong></p>
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-[#7a5c56]">
+          <p>Kein Event gefunden.</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
