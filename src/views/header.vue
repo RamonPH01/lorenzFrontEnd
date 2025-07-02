@@ -4,7 +4,7 @@
 
     <!-- Überschrift -->
     <h1 class="text-6xl text-[#98743c] quicksand-light font-light tracking-wide m-15 text-center">
-      <router-link to="/" class="no-underline" >
+      <router-link to="/" class="no-underline">
         Lorenz Tagesbar
       </router-link>
     </h1>
@@ -17,15 +17,15 @@
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          class="flex flex-col items-center w-36"
+          class="flex flex-col items-center w-36 group"
       >
+    <span
+        class="block h-1 w-20 mb-2 rounded bg-[#98743c] transition-all duration-200 group-hover:bg-[#b89968]"
+        v-if="route.path === item.to"
+    ></span>
         <span
-            class="block h-1 w-20 mb-2 rounded bg-[#98743c] transition-all duration-200"
-            v-if="route.path === item.to"
-        ></span>
-        <span
-            class="text-base raleway-light"
-            :style="{ color: route.path === item.to ? '#98743c' : '#757575' }"
+            class="text-base raleway-light transition-colors duration-200"
+            :class="route.path === item.to ? 'text-[#98743c]' : 'text-[#757575] group-hover:text-[#b89968]'"
         >
           {{ item.label }}
         </span>
@@ -35,16 +35,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useRouter } from "vue-router";
+import {ref, onMounted, onBeforeUnmount} from "vue";
+import {useRouter} from "vue-router";
 
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
+
 const route = useRoute();
 
 const navItems = [
-  { label: "Eventübersicht", to: "/" },
-  { label: "Request Page", to: "/request" },
-  { label: "Host Page", to: "/host-login" }
+  {label: "Eventübersicht", to: "/"},
+  {label: "Request Page", to: "/request"},
+  {label: "Host Page", to: "/host-login"}
 ];
 
 const dropdownOpen = ref(false);
@@ -85,6 +86,7 @@ onBeforeUnmount(() => {
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.18s;
 }
+
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
