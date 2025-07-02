@@ -12,25 +12,25 @@
     <div class="w-full h-px bg-[#cfcfcf] mb-8"></div>
 
     <!-- Menüleiste -->
-    <nav class="flex justify-center gap-24 w-full max-w-4xl">
-      <router-link
-          v-for="item in navItems"
-          :key="item.to"
-          :to="item.to"
-          class="flex flex-col items-center w-36 group"
-      >
+    <nav class="flex justify-center w-full max-w-4xl gap-[2px] sm:gap-2 md:gap-8 lg:gap-16 xl:gap-24">
+    <router-link
+        v-for="item in navItems"
+        :key="item.to"
+        :to="item.to"
+        class="flex flex-col items-center w-36 group"
+    >
     <span
         class="block h-1 w-20 mb-2 rounded bg-[#98743c] transition-all duration-200 group-hover:bg-[#b89968]"
         v-if="route.path === item.to"
     ></span>
-        <span
-            class="text-base raleway-light transition-colors duration-200"
-            :class="route.path === item.to ? 'text-[#98743c]' : 'text-[#757575] group-hover:text-[#b89968]'"
-        >
-          {{ item.label }}
-        </span>
-      </router-link>
-    </nav>
+      <span
+          class="text-base raleway-light transition-colors duration-200"
+          :class="route.path === item.to ? 'text-[#98743c]' : 'text-[#757575] group-hover:text-[#b89968]'"
+      >
+      {{ item.label }}
+    </span>
+    </router-link>
+  </nav>
   </header>
 </template>
 
