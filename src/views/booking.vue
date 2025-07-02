@@ -114,8 +114,6 @@ onMounted(async () => {
         <!-- Buchen Button -->
         <button
             class="bg-[#98743c] hover:bg-[#7a5c56] text-white font-bold py-2 px-4 w-full cursor-pointer"
-            :key="event.id"
-            :to="`/booking/${event.id}`"
             @click="bookEvent"
         >
           Buchung starten

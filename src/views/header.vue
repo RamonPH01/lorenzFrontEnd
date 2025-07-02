@@ -20,7 +20,7 @@
         class="flex flex-col items-center w-36 group"
     >
     <span
-        class="block h-1 w-20 mb-2 rounded bg-[#98743c] transition-all duration-200 group-hover:bg-[#b89968]"
+        class="block h-1 w-30 mb-2 rounded bg-[#98743c] transition-all duration-200 group-hover:bg-[#b89968]"
         v-if="route.path === item.to"
     ></span>
       <span

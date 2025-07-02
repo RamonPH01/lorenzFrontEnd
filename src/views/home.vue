@@ -59,13 +59,14 @@ function formatDate(dateString) {
                     v-for="event in events"
                     :key="event.id"
                     :to="`/event/${event.id}`"
-                    class="bg-white no-underline block shadow-xl hover:shadow-[#5c3c26] p-5 transition"
+                    class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
                 >
                     <img
-                        :src="event.picture"
+                        src="../assets/background_cafe.jpg"
+
                         alt="Eventbild"
-                        class="rounded-xl mb-3 h-40 w-full object-cover"
-                    />
+                        class="mb-3 h-40 w-full object-cover"
+                    /> <!-- :src="event.picture" -->
                     <h2 class="text-2xl font-semibold text-[#4a2c2a] mb-2">
                         {{ event.name }}
                     </h2>
