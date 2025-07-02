@@ -52,15 +52,14 @@ function formatDate(dateString) {
 </script>
 
 <template>
-    <div class="font-mono">
-        <div class="min-h-screen bg-[#eacdb6] p-6">
+        <div class="min-h-screen p-6">
             <!-- Eventliste -->
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <router-link
                     v-for="event in events"
                     :key="event.id"
                     :to="`/event/${event.id}`"
-                    class="no-underline block bg-[#d9b49c] shadow-md hover:shadow-lg rounded-2xl border border-[#deb699] p-5 transition"
+                    class="no-underline block shadow-md hover:shadow-lg p-5 transition"
                 >
                     <img
                         :src="event.picture"
@@ -76,6 +75,5 @@ function formatDate(dateString) {
                     <p class="text-sm text-[#9a837a]">{{ event.price }} €</p>
                 </router-link>
             </div>
-        </div>
     </div>
 </template>

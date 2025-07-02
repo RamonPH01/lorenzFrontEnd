@@ -144,7 +144,7 @@ const submitForm = async () => {
         class="font-mono min-h-screen bg-[#eacdb6] p-6 flex flex-col items-center justify-center"
     >
         <div
-            class="bg-[#d9b49c] shadow-md rounded-2xl border border-[#deb699] p-8 w-full max-w-md"
+            class="bg-[#d9b49c] shadow-md rounded-2xl border border-[#4a2c2a] p-8 w-full max-w-md"
         >
             <h1 class="text-3xl font-bold text-[#4a2c2a] mb-4 text-center">
                 Anfrageformular
@@ -154,7 +154,7 @@ const submitForm = async () => {
                 <input
                     v-model="firstName"
                     type="text"
-                    class="rounded-xl border border-[#deb699] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+                    class="rounded-xl border border-[#4a2c2a] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
                     placeholder="Vorname*"
                     required
                 />
@@ -257,8 +257,7 @@ const submitForm = async () => {
                 <!-- Kontaktpräferenz -->
                 <div v-if="showContactPreference" class="flex flex-col gap-2">
                     <label class="font-semibold text-[#4a2c2a]"
-                        >Wie sollen wir Sie kontaktieren?*</label
-                    >
+                        >Wie sollen wir Sie kontaktieren?*</label>
                     <div class="flex gap-4">
                         <label>
                             <input
