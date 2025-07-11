@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from 'vue-router';
+import {ref} from "vue";
+import {useRouter} from 'vue-router';
 
 const username = ref("");
 const password = ref("");
@@ -24,37 +24,37 @@ function handleLogin() {
 </script>
 
 <template>
+  <div
+      class="min-h-screen flex items-center justify-center"
+  >
     <div
-        class="font-mono min-h-screen bg-[#eacdb6] flex items-center justify-center"
+        class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition p-8 w-full max-w-sm"
     >
-        <div
-            class="bg-[#d9b49c] shadow-md rounded-2xl border border-[#deb699] p-8 w-full max-w-sm"
+      <h1 class="text-3xl font-bold text-[#4a2c2a] mb-3 text-center">
+        Veranstalter Login
+      </h1>
+      <div class="w-full h-px bg-[#cfcfcf] mb-4 mt-4"></div>
+      <form @submit.prevent="handleLogin" class="flex flex-col gap-4 mt-3">
+        <input
+            v-model="username"
+            type="text"
+            placeholder="Benutzername"
+            class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+        />
+        <input
+            v-model="password"
+            type="password"
+            placeholder="Passwort"
+            class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+        />
+        <button
+            class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer"
+            type="submit"
         >
-            <h1 class="text-3xl font-bold text-[#4a2c2a] mb-3 text-center">
-                Host Login
-            </h1>
-          <hr/>
-            <form @submit.prevent="handleLogin" class="flex flex-col gap-4 mt-3">
-                <input
-                    v-model="username"
-                    type="text"
-                    placeholder="Benutzername"
-                    class="rounded-xl border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
-                />
-                <input
-                    v-model="password"
-                    type="password"
-                    placeholder="Passwort"
-                    class="rounded-xl border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
-                />
-                <button
-                    type="submit"
-                    class="bg-[#eacdb6] text-[#4a2c2a] font-semibold rounded-xl py-2 hover:bg-[#deb699] transition cursor-pointer"
-                >
-                    Login
-                </button>
-                <p v-if="error" class="text-red-600 text-center">{{ error }}</p>
-            </form>
-        </div>
+          Login
+        </button>
+        <p v-if="error" class="text-red-600 text-center">{{ error }}</p>
+      </form>
     </div>
+  </div>
 </template>

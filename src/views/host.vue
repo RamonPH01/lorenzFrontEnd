@@ -99,23 +99,20 @@ const addEvent = () => {
 </script>
 
 <template>
-    <div class="font-mono bg-[#fdf6f0] p-6 rounded-xl shadow-inner">
-        <h2 class="text-3xl font-bold mb-4 text-[#5a2a27]">
-            Veranstalter-Ansicht
-        </h2>
+    <div class="p-6 shadow-inner">
 
         <!-- Neues Event erstellen -->
-        <form
-            @submit.prevent="addEvent"
-            class="bg-white p-6 rounded-xl shadow mb-8"
-        >
+      <form
+          @submit.prevent="addEvent"
+          class="bg-white shadow-lg p-5 transition mb-6 w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]"
+      >
             <h3 class="text-xl font-semibold mb-3">Neues Event anlegen</h3>
-            <div class="grid gap-4 md:grid-cols-2">
+            <div class="grid gap-4">
                 <input
                     v-model="newEvent.name"
                     type="text"
                     placeholder="Eventname"
-                    class="p-2 border rounded"
+                    class="p-2 border"
                     required
                 />
                 Ticketanzahl
@@ -123,14 +120,14 @@ const addEvent = () => {
                     v-model="newEvent.numTickets"
                     type="number"
                     placeholder="Tickets"
-                    class="p-2 border rounded"
+                    class="p-2 border"
                     required
                 />
                 <input
                     v-model="newEvent.picture"
                     type="text"
                     placeholder="Bild-URL"
-                    class="p-2 border rounded"
+                    class="p-2 border"
                 /> <!-- muss noch geändert werden zu einem Upload -->
               Datum und Uhrzeit
               <input
@@ -146,34 +143,35 @@ const addEvent = () => {
                     type="text"
                     :is-multi="true"
                     placeholder="Diäten"
-                    class="border rounded"
+                    class="border"
                 />
                 <textarea
                     v-model="newEvent.description"
                     placeholder="Beschreibung"
-                    class="p-2 border rounded md:col-span-2"
+                    class="p-2 border"
                     required
                 ></textarea>
             </div>
             <button
                 type="submit"
-                class="mt-4 bg-[#d64545] text-white px-4 py-2 rounded hover:bg-[#b73737] transition"
+                class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer mt-6"
             >
                 Hinzufügen
             </button>
         </form>
 
         <!-- Eventliste -->
-        <div>
-            <h3 class="text-xl font-semibold mb-3">Meine Events</h3>
+        <div class="bg-white shadow-lg p-5 transition mb-6 w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]">
+            <h3 class="text-xl font-semibold mb-4">Meine Events</h3>
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <div
                     v-for="event in events"
                     :key="event.id"
-                    class="bg-white p-4 rounded-xl shadow border border-[#f0eae4]"
+                    class="bg-[#fcedd7] no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
                 >
-                    <h4 class="text-lg font-semibold mb-1">{{ event.name }}</h4>
-                    <p class="text-sm text-gray-700">{{ event.description }}</p>
+                    <h4 class="text-lg font-semibold mb-4">{{ event.name }}</h4>
+                  <div class="w-full h-px bg-[#cfcfcf]"></div>
+                  <p class="text-sm text-gray-700 mt-4">{{ event.description }}</p>
                     <p class="text-xs text-gray-500 mt-1">
                         {{ event.numTickets }} Tickets · Diäten:
                         {{ event.availableDiets.join(", ") || "Keine" }}
