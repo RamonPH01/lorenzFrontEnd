@@ -1,7 +1,7 @@
 <script lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {ref} from "vue";
+import {useRouter} from "vue-router";
+import {getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 
 export default {
   setup() {
@@ -9,31 +9,16 @@ export default {
     const password = ref("");
     const router = useRouter();
     const error = ref("");
-    const errMsg = ref("");
 
     const register = () => {
-      signInWithEmailAndPassword(getAuth(), email.value, password.value)
+      createUserWithEmailAndPassword(getAuth(), email.value, password.value)
           .then(() => {
             console.log("Successfully created user");
             router.push("/host");
           })
-          .catch((error) => {
-            console.log(error.code);
-            switch (error) {
-              case "auth/email-already-in-use":
-                errMsg.value = "Email already in use";
-                break;
-              case "auth/user-not-found":
-                errMsg.value = "No user with that email was found";
-                break;
-              case "auth/wrong-password":
-                errMsg.value = "Wrong password";
-                break;
-              default:
-                errMsg.value = "Email or password wrong";
-                break;
-            }
-            error.value = error.message;
+          .catch((err) => {
+            console.log(err.code);
+            error.value = err.message;
           });
     };
 
@@ -56,7 +41,7 @@ export default {
       password,
       register,
       signInWithGoogle,
-      errMsg
+      error
     };
   }
 };
@@ -78,27 +63,30 @@ export default {
           v-model="email"
           type="text"
           placeholder="E-Mail"
-          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6] m-1 w-full"
       />
       <input
           v-model="password"
           type="password"
           placeholder="Passwort"
-          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6] m-1 w-full"
       />
-      <p v-if="errMsg" class="text-red-600 text-center">{{ errMsg }}</p>
+
+      <div class="w-full h-px bg-[#cfcfcf] mb-4 mt-4"></div>
+
       <button
-          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer"
+          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-1 w-full cursor-pointer"
           @click="register()"
       >
-        Einloggen
+        Registrieren
       </button>
       <button
-          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer"
+          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-1 w-full cursor-pointer"
           @click="signInWithGoogle"
       >
         Mit Google registrieren
       </button>
+      <p v-if="error" class="text-red-600 text-center">{{ error }}</p>
     </div>
   </div>
 </template>

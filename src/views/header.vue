@@ -3,7 +3,7 @@
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400&display=swap" rel="stylesheet">
 
     <!-- Überschrift -->
-    <h1 class="text-6xl text-[#98743c] quicksand-light font-light tracking-wide m-15 text-center">
+    <h1 class="text-3xl md:text-6xl text-[#98743c] quicksand-light font-light tracking-wide m-5 text-center">
       <router-link to="/" class="no-underline">
         Lorenz Tagesbar
       </router-link>
@@ -30,67 +30,50 @@
       {{ item.label }}
     </span>
     </router-link>
-  </nav>
+      <button v-if="isLoggedIn" @click="handleSignOut" class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-4 w-150px cursor-pointer">Ausloggen</button>
+
+    </nav>
   </header>
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, onBeforeUnmount} from "vue";
-import {useRouter} from "vue-router";
-
-import {useRoute} from "vue-router";
-
-const route = useRoute();
+import {ref, onMounted } from "vue";
+import {useRouter, useRoute} from "vue-router";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const navItems = [
   {label: "Eventübersicht", to: "/"},
   {label: "Request Page", to: "/request"},
-  {label: "Host Page", to: "/host-login"}
+  {label: "Host Page", to: "/host-login"},
+  {label: "Host Register", to: "/host-register"},
+  {label: "Login", to: "/host-login"}
 ];
 
-const dropdownOpen = ref(false);
-const dropdownRef = ref<HTMLElement | null>(null);
 const router = useRouter();
+const route = useRoute();
+const isLoggedIn = ref(false);
+let auth;
 
-function toggleDropdown() {
-  dropdownOpen.value = !dropdownOpen.value;
-}
-
-function closeDropdown() {
-  dropdownOpen.value = false;
-}
-
-function handleClickOutside(e: MouseEvent) {
-  if (
-      dropdownOpen.value &&
-      dropdownRef.value &&
-      !dropdownRef.value.contains(e.target as Node)
-  ) {
-    dropdownOpen.value = false;
-  }
+function handleSignOut() {
+  signOut(auth).then(() => {
+    router.push("/");
+  })
 }
 
 onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-  router.afterEach(() => {
-    closeDropdown();
-  });
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      isLoggedIn.value = true;
+    } else {
+      isLoggedIn.value = false;
+    }
+  })
 });
 
-onBeforeUnmount(() => {
-  document.removeEventListener("click", handleClickOutside);
-});
 </script>
 
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.18s;
-}
-
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
 .quicksand-light {
   font-family: 'Quicksand', sans-serif;
   font-weight: 300;
