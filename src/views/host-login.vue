@@ -11,7 +11,7 @@ export default {
     const error = ref("");
     const errMsg = ref("");
 
-    const register = () => {
+    const login = () => {
       signInWithEmailAndPassword(getAuth(), email.value, password.value)
           .then(() => {
             console.log("Successfully created user");
@@ -54,7 +54,7 @@ export default {
     return {
       email,
       password,
-      register,
+      login,
       signInWithGoogle,
       errMsg
     };
@@ -92,7 +92,7 @@ export default {
 
       <button
           class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-1 w-full cursor-pointer"
-          @click="register()"
+          @click="login()"
       >
         Einloggen
       </button>
