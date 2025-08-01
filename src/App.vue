@@ -1,18 +1,19 @@
-<template>
-  <div class="min-h-screen flex flex-col">
-    <Header/>
-    <div class="flex-1">
-      <router-view/>
-    </div>
-    <Footer/>
-  </div>
-</template>
-
-
 <script setup lang="ts">
 import Header from "../src/views/header.vue"
 import Footer from "../src/views/footer.vue"
+import LoginMenu from "../src/customElements/LoginMenu.vue"
 </script>
+
+<template>
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    <div class="flex-1">
+      <router-view />
+    </div>
+    <Footer />
+    <LoginMenu />
+  </div>
+</template>
 
 <style>
 body {
@@ -28,6 +29,4 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.1em;
   color: #98743c;
 }
-
-
 </style>

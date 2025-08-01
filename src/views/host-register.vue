@@ -72,6 +72,7 @@ export default {
           class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6] m-1 w-full"
       />
 
+      <p v-if="error" class="text-red-600 text-center m-1">{{ error }}</p>
       <div class="w-full h-px bg-[#cfcfcf] mb-4 mt-4"></div>
 
       <button
@@ -86,7 +87,6 @@ export default {
       >
         Mit Google registrieren
       </button>
-      <p v-if="error" class="text-red-600 text-center">{{ error }}</p>
     </div>
   </div>
 </template>

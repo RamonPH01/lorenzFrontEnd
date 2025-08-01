@@ -71,33 +71,36 @@ export default {
         class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition p-8 w-full max-w-sm"
     >
       <h1 class="text-3xl font-bold text-[#4a2c2a] mb-3 text-center">
-        Veranstalter Registrierung
+        Veranstalter Anmeldung
       </h1>
       <div class="w-full h-px bg-[#cfcfcf] mb-4 mt-4"></div>
       <input
           v-model="email"
           type="text"
           placeholder="E-Mail"
-          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6] m-1 w-full"
       />
       <input
           v-model="password"
           type="password"
           placeholder="Passwort"
-          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6]"
+          class="border border-[#eacdb6] p-3 focus:outline-none focus:ring-2 focus:ring-[#eacdb6] m-1 w-full"
       />
-      <p v-if="errMsg" class="text-red-600 text-center">{{ errMsg }}</p>
+
+      <p v-if="errMsg" class="text-red-600 text-center m-1">{{ errMsg }}</p>
+      <div class="w-full h-px bg-[#cfcfcf] mb-4 mt-4"></div>
+
       <button
-          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer"
+          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-1 w-full cursor-pointer"
           @click="register()"
       >
         Einloggen
       </button>
       <button
-          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer"
+          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-1 w-full cursor-pointer"
           @click="signInWithGoogle"
       >
-        Mit Google registrieren
+        Mit Google anmelden
       </button>
     </div>
   </div>

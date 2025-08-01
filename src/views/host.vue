@@ -106,58 +106,59 @@ const addEvent = () => {
           @submit.prevent="addEvent"
           class="bg-white shadow-lg p-5 transition mb-6 w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]"
       >
-            <h3 class="text-xl font-semibold mb-3">Neues Event anlegen</h3>
-            <div class="grid gap-4">
-                <input
-                    v-model="newEvent.name"
-                    type="text"
-                    placeholder="Eventname"
-                    class="p-2 border"
-                    required
-                />
-                Ticketanzahl
-                <input
-                    v-model="newEvent.numTickets"
-                    type="number"
-                    placeholder="Tickets"
-                    class="p-2 border"
-                    required
-                />
-                <input
-                    v-model="newEvent.picture"
-                    type="text"
-                    placeholder="Bild-URL"
-                    class="p-2 border"
-                /> <!-- muss noch geändert werden zu einem Upload -->
-              Datum und Uhrzeit
-              <input
-                  id="datum"
-                  type="datetime-local"
-                  v-model="datum"
-                  :min="minDateTime"
-                  :max="maxDateTime"
-              >
-                <VueSelect
-                    v-model="newEvent.availableDiets"
-                    :options="dietOptions"
-                    type="text"
-                    :is-multi="true"
-                    placeholder="Diäten"
-                    class="border"
-                />
-                <textarea
-                    v-model="newEvent.description"
-                    placeholder="Beschreibung"
-                    class="p-2 border"
-                    required
-                ></textarea>
-            </div>
-            <button
-                type="submit"
-                class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer mt-6"
-            >
-                Hinzufügen
-            </button>
+        <h3 class="text-xl font-semibold mb-3">Neues Event anlegen</h3>
+        <div class="grid">
+          <input
+              v-model="newEvent.name"
+              type="text"
+              placeholder="Event Name"
+              class="p-2 mt-2 mb-2 border"
+              required
+          />
+          <span class="mb-0 mt-2">Ticketanzahl</span>
+          <input
+              v-model="newEvent.numTickets"
+              type="number"
+              placeholder="Ticketanzahl"
+              class="p-2 mt-2 mb-2 border"
+              required
+          />
+          <span class="mb-0 mt-2">Datum und Uhrzeit</span>
+          <input
+              id="datum"
+              type="datetime-local"
+              class="p-2 mt-2 mb-2 border"
+              v-model="datum"
+              :min="minDateTime"
+              :max="maxDateTime"
+          >
+          <VueSelect
+              v-model="newEvent.availableDiets"
+              :options="dietOptions"
+              type="text"
+              :is-multi="true"
+              placeholder="Diäten"
+              class="border mb-2 mt-2"
+          />
+          <textarea
+              v-model="newEvent.description"
+              placeholder="Beschreibung"
+              class="p-2 mt-2 mb-2 border"
+              required
+          ></textarea>
+          <input
+              v-model="newEvent.picture"
+              type="text"
+              placeholder="Titelbild"
+              class="p-2 mt-2 mb-2 border"
+          /> <!-- muss noch geändert werden zu einem Upload -->
+        </div>
+        <button
+            type="submit"
+            class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer mt-6"
+        >
+            Hinzufügen
+        </button>
         </form>
 
         <!-- Eventliste -->

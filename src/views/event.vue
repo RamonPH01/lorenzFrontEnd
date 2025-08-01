@@ -2,11 +2,9 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-// import { useBookingStore } from "../stores/booking";
 
 const route = useRoute();
 const router = useRouter();
-const bookingStore = useBookingStore();
 
 const event = ref<any | null>(null);
 const loading = ref(true);
@@ -58,14 +56,6 @@ function startBooking() {
   if (!event.value) return;
 
   console.log(event.value)
-
-  // ✅ Speichere Auswahl im Pinia-Store
-  bookingStore.startBooking(
-      event.value.id,
-      dietCounts.value,
-      event.value.price,
-      event.value.name
-  );
 
   // ✅ Weiter zum Checkout
   router.push("/checkout");
