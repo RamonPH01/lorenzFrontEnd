@@ -66,36 +66,55 @@ function mapEvents(rawEvents: any[]): any[] {
     }));
 }
 
-const newEvent = ref<Omit<Event, "id">>({
-    name: "",
-    numTickets: 0,
-    description: "",
-    hostId: 1,
-    picture: "",
-    availableDiets: [],
-    price: 0,
+const newEvent = ref({
+  name: "",
+  numTickets: 0,
+  description: "",
+  availableDiets: [],
+  price: 0,
+  picture: null as File | null,
 });
 
-const addEvent = () => {
-    const id = events.value.length + 1;
-    const diets = Array.isArray(newEvent.value.availableDiets)
-        ? newEvent.value.availableDiets
-        : newEvent.value.availableDiets
-              .toString()
-              .split(",")
-              .map((d) => d.trim())
-              .filter(Boolean);
+function handleImageUpload(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    if (target.files[0].size > 16 * 1024 * 1024) { // groesser als erlaubt (16MB)
+      alert("Datei ist zu groß. Maximal erlaubt: 16 MB.");
+      return;
+    } else {
+      newEvent.value.picture = target.files[0];
+    }
+  }
+}
 
-    events.value.push({ id, ...newEvent.value, availableDiets: diets });
-    newEvent.value = {
-        name: "",
-        numTickets: 0,
-        description: "",
-        hostId: 1,
-        picture: "",
-        availableDiets: [],
-    };
-};
+async function addEvent() {
+  try {
+    const formData = new FormData();
+    formData.append("name", newEvent.value.name);
+    formData.append("numTickets", newEvent.value.numTickets.toString());
+    formData.append("description", newEvent.value.description);
+    formData.append("date", datum.value);
+    formData.append("price", newEvent.value.price.toString());
+    formData.append("availableDiets", newEvent.value.availableDiets.join(","));
+    formData.append("fk_host", "1"); // Beispiel: Host-ID auf 1 gesetzt
+
+    if (newEvent.value.picture) {
+      formData.append("picture", newEvent.value.picture);
+    }
+
+    await axios.post("http://localhost:8080/event", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    alert("Event erfolgreich erstellt!");
+    window.location.reload(); // oder: Events neu laden
+  } catch (err) {
+    console.error("Fehler beim Hinzufügen:", err);
+    alert("Fehler beim Erstellen des Events.");
+  }
+}
 </script>
 
 <template>
@@ -123,6 +142,14 @@ const addEvent = () => {
               class="p-2 mt-2 mb-2 border"
               required
           />
+          <span class="mb-0 mt-2">Ticketpreis</span>
+          <input
+              v-model="newEvent.price"
+              type="number"
+              placeholder="Preis"
+              class="p-2 mt-2 mb-2 border"
+              required
+          />
           <span class="mb-0 mt-2">Datum und Uhrzeit</span>
           <input
               id="datum"
@@ -147,11 +174,11 @@ const addEvent = () => {
               required
           ></textarea>
           <input
-              v-model="newEvent.picture"
-              type="text"
-              placeholder="Titelbild"
+              type="file"
+              @change="handleImageUpload"
+              accept="image/*"
               class="p-2 mt-2 mb-2 border"
-          /> <!-- muss noch geändert werden zu einem Upload -->
+          />
         </div>
         <button
             type="submit"

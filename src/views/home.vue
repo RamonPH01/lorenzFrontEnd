@@ -61,12 +61,12 @@ function formatDate(dateString) {
                     :to="`/event/${event.id}`"
                     class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
                 >
-                    <img
-                        src="../assets/background_cafe.jpg"
-
-                        alt="Eventbild"
-                        class="mb-3 h-40 w-full object-cover"
-                    /> <!-- :src="event.picture" -->
+                  <img
+                      v-if="event.picture && event.picture.fileData"
+                      :src="`data:image/*;base64,${event.picture.fileData}`"
+                      alt="Eventbild"
+                      class="mb-3 h-40 w-full object-cover"
+                  />
                     <h2 class="text-2xl font-semibold text-[#4a2c2a] mb-2">
                         {{ event.name }}
                     </h2>

@@ -6,6 +6,6 @@ export interface Event {
   date: Date;
   price: number;
   hostId: number; // FK_Host
-  picture: string; // z.B. URL oder Base64
+  picture: File; // z.B. URL oder Base64
   availableDiets: string[]; // z.B. ["vegan", "vegetarisch", "glutenfrei"]
 }
