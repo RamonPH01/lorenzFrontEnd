@@ -22,25 +22,10 @@ export default {
           });
     };
 
-    const signInWithGoogle = () => {
-      // const provider = new GoogleAuthProvider();
-      // const auth = getAuth();
-      // signInWithPopup(auth, provider)
-      //     .then(() => {
-      //       console.log("Signed in with Google");
-      //       router.push("/host");
-      //     })
-      //     .catch((err) => {
-      //       console.log(err.code);
-      //       error.value = err.message;
-      //     });
-    };
-
     return {
       email,
       password,
       register,
-      signInWithGoogle,
       error
     };
   }
@@ -80,12 +65,6 @@ export default {
           @click="register()"
       >
         Registrieren
-      </button>
-      <button
-          class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 m-1 w-full cursor-pointer"
-          @click="signInWithGoogle"
-      >
-        Mit Google registrieren
       </button>
     </div>
   </div>

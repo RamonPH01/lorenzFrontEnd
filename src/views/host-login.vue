@@ -38,17 +38,17 @@ export default {
     };
 
     const signInWithGoogle = () => {
-      // const provider = new GoogleAuthProvider();
-      // const auth = getAuth();
-      // signInWithPopup(auth, provider)
-      //     .then(() => {
-      //       console.log("Signed in with Google");
-      //       router.push("/host");
-      //     })
-      //     .catch((err) => {
-      //       console.log(err.code);
-      //       error.value = err.message;
-      //     });
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth();
+      signInWithPopup(auth, provider)
+          .then(() => {
+            console.log("Signed in with Google");
+            router.push("/host");
+          })
+          .catch((err) => {
+            console.log(err.code);
+            error.value = err.message;
+          });
     };
 
     return {
