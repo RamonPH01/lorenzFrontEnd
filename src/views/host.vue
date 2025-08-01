@@ -66,6 +66,19 @@ function mapEvents(rawEvents: any[]): any[] {
     }));
 }
 
+function validateEventForm(): string[] {
+  const errors: string[] = [];
+
+  if (!newEvent.value.name.trim()) errors.push("Event Name");
+  if (!newEvent.value.numTickets || newEvent.value.numTickets <= 0) errors.push("Ticketanzahl");
+  if (!newEvent.value.price || newEvent.value.price <= 0) errors.push("Preis");
+  if (!datum.value) errors.push("Datum und Uhrzeit");
+  if (!newEvent.value.availableDiets.length) errors.push("Diäten");
+  if (!newEvent.value.description.trim()) errors.push("Beschreibung");
+
+  return errors;
+}
+
 const newEvent = ref({
   name: "",
   numTickets: 0,
@@ -88,6 +101,12 @@ function handleImageUpload(event: Event) {
 }
 
 async function addEvent() {
+  const errors = validateEventForm();
+  if (errors.length > 0) {
+    alert("Bitte fülle folgende Felder aus:\n- " + errors.join("\n- "));
+    return;
+  }
+
   try {
     const formData = new FormData();
     formData.append("name", newEvent.value.name);
@@ -158,6 +177,7 @@ async function addEvent() {
               v-model="datum"
               :min="minDateTime"
               :max="maxDateTime"
+              required
           >
           <VueSelect
               v-model="newEvent.availableDiets"
@@ -166,6 +186,7 @@ async function addEvent() {
               :is-multi="true"
               placeholder="Diäten"
               class="border mb-2 mt-2"
+              required
           />
           <textarea
               v-model="newEvent.description"

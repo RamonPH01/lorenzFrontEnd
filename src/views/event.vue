@@ -72,8 +72,8 @@ function startBooking() {
       <div v-else-if="error" class="mb-4">{{ error }}</div>
       <div v-else-if="event" class="mb-4">
         <img
-            v-if="event.picture"
-            src="../assets/background_cafe.jpg"
+            v-if="event.picture && event.picture.fileData"
+            :src="`data:image/*;base64,${event.picture.fileData}`"
             alt="Eventbild"
             class="mb-4 h-52 w-full object-cover"
         />
