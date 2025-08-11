@@ -13,6 +13,8 @@ const error = ref<string | null>(null);
 const dietCounts = ref<Record<string, number>>({});
 const maxPerDiet = 10;
 
+const showError = ref(false);
+
 onMounted(async () => {
   const eventId = Number(route.params.id);
   try {
@@ -52,8 +54,19 @@ function formatDate(dateString: string) {
   return `${day}.${month}.${year} um ${hours}:${minutes} Uhr`;
 }
 
+function hasValidDietSelection() {
+  return Object.values(dietCounts.value).some((count) => count > 0);
+}
+
 function startBooking() {
   if (!event.value) return;
+
+  if (!hasValidDietSelection()) {
+    showError.value = true;
+    return;
+  } else {
+    showError.value = false;
+  }
 
   console.log(event.value)
 
@@ -105,6 +118,10 @@ function startBooking() {
                 :max="maxPerDiet"
             />
           </div>
+        </div>
+
+        <div v-if="showError" class="text-red-500 mb-4">
+          Bitte wähle mindestens eine Ernährungsoption aus.
         </div>
 
         <!-- Buchen Button -->
