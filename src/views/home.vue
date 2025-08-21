@@ -59,7 +59,8 @@ function formatDate(dateString) {
                     v-for="event in events"
                     :key="event.id"
                     :to="`/event/${event.id}`"
-                    class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
+                    class="no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
+                    style="background: rgba(255, 255, 255, 0.9)"
                 >
                   <img
                       v-if="event.picture && event.picture.fileData"

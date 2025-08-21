@@ -140,36 +140,12 @@ const submitForm = async () => {
 </script>
 
 <template>
-
-
-  <!--  <router-link-->
-  <!--      v-for="event in events"-->
-  <!--      :key="event.id"-->
-  <!--      :to="`/event/${event.id}`"-->
-  <!--      class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"-->
-  <!--  >-->
-  <!--    <img-->
-  <!--        src="../assets/background_cafe.jpg"-->
-
-  <!--        alt="Eventbild"-->
-  <!--        class="mb-3 h-40 w-full object-cover"-->
-  <!--    /> &lt;!&ndash; :src="event.picture" &ndash;&gt;-->
-  <!--    <h2 class="text-2xl font-semibold text-[#4a2c2a] mb-2">-->
-  <!--      {{ event.name }}-->
-  <!--    </h2>-->
-  <!--    <p class="text-[#7a5c56] mb-1">-->
-  <!--      {{ formatDate(event.date) }}-->
-  <!--    </p>-->
-  <!--    <p class="text-sm text-[#9a837a]">{{ event.price }} €</p>-->
-  <!--  </router-link>-->
-  <!--  -->
-
-
   <div
       class="min-h-screen p-6 flex flex-col items-center justify-center"
   >
     <div
-        class="bg-white no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
+        class="no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition"
+        style="background: rgba(255, 255, 255, 0.9)"
     >
       <h1 class="text-2xl font-semibold text-[#4a2c2a] mb-6">
         Anfrageformular
