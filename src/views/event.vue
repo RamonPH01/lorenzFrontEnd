@@ -70,7 +70,6 @@ function startBooking() {
 
   console.log(event.value)
 
-  // ✅ Weiter zum Checkout
   router.push("/checkout");
 }
 </script>
@@ -120,7 +119,7 @@ function startBooking() {
           </div>
         </div>
 
-        <div v-if="showError" class="text-red-500 mb-4">
+        <div v-if="showError" class="text-red-800 mb-4">
           Bitte wähle mindestens eine Ernährungsoption aus.
         </div>
 
