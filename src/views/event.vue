@@ -68,8 +68,6 @@ function startBooking() {
     showError.value = false;
   }
 
-  console.log(event.value)
-
   router.push("/checkout");
 }
 </script>

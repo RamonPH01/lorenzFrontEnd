@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/home.vue";
 import Host from "../views/host.vue";
 import Event from "../views/event.vue";
-import HostLogin from "../views/host-login.vue";
+import HostLogin from "../views/hostLogin.vue";
 import Request from "../views/request.vue";
 import Checkout from "../views/checkout.vue";
-import HostRegister from "../views/host-register.vue";
+import HostRegister from "../views/hostRegister.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
@@ -15,8 +15,8 @@ const routes = [
   { path: "/event/:id", name: "event", component: Event },
   { path: "/request", name: "request", component: Request },
   { path: "/checkout", name: "checkout", component: Checkout },
-  { path: "/host-register", name: "host-register", component: HostRegister},
-  { path: "/host-login", name: "host-login", component: HostLogin },
+  { path: "/hostRegister", name: "hostRegister", component: HostRegister},
+  { path: "/hostLogin", name: "hostLogin", component: HostLogin },
 ];
 
 const router = createRouter({
@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
     if (user) {
       next();
     } else {
-      next("/host-login"); // Redirect zum Login
+      next("/hostLogin"); // Redirect zum Login
     }
   });
 });

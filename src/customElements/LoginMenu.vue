@@ -74,7 +74,7 @@ function handleSignOut() {
 
 function handleLogIn() {
   showLogoutMenu.value = false
-  router.push('/host-login')
+  router.push('/hostLogin')
 }
 
 // Check if contrast is needed

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type {Event} from "../types/event";
+import type {Event as EventModel} from "../types/event";
 import {ref, onMounted} from "vue";
 import axios from "axios";
 import VueSelect from "vue3-select-component";
 
 const dietOptions = [
-  {label: "Vegetarisch", value: "vegetarisch"},
+  {label: "Vegetarisch", value: "vegetarian"},
   {label: "Vegan", value: "vegan"},
   {label: "Glutenfrei", value: "glutenfree"},
   {label: "Laktosefrei", value: "lactosefree"},
@@ -15,26 +15,27 @@ const dietOptions = [
   {label: "Keine besonderen Wünsche", value: "nothing"},
 ];
 
-const events = ref<Event[]>([]);
+const createEvent = ref(false);
+const selectedEventId = ref<number | null>(null);
+
+const events = ref<EventModel[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
-const now = new Date()
-const minDateTime = formatDateTime(now)
+const now = new Date();
+const minDateTime = formatDateTime(now);
 
-const nextYear = new Date()
-nextYear.setFullYear(now.getFullYear() + 1)
-const maxDateTime = formatDateTime(nextYear)
+const nextYear = new Date();
+nextYear.setFullYear(now.getFullYear() + 1);
+const maxDateTime = formatDateTime(nextYear);
 
-const datum = ref(minDateTime)
-const isDivCreateEventVisible = ref(false)  // Korrekt als `ref` deklariert
-const isDivShowEventsVisible = ref(false)
+const datum = ref<string>(minDateTime);
+const isDivCreateEventVisible = ref(false);
+const isDivShowEventsVisible = ref(false);
 
 onMounted(async () => {
   try {
-    const response = await axios.get<Event[]>(
-        "http://localhost:8080/event/get",
-    );
+    const response = await axios.get<EventModel[]>("http://localhost:8080/event/get");
     events.value = mapEvents(response.data);
   } catch (err) {
     error.value = "Fehler beim Laden der Events.";
@@ -44,14 +45,13 @@ onMounted(async () => {
   }
 });
 
-function formatDateTime(date) {
-  // Gibt YYYY-MM-DDTHH:MM zurück (z.B. 2025-06-25T13:45)
-  const yyyy = date.getFullYear()
-  const mm = String(date.getMonth() + 1).padStart(2, '0')
-  const dd = String(date.getDate()).padStart(2, '0')
-  const hh = String(date.getHours()).padStart(2, '0')
-  const min = String(date.getMinutes()).padStart(2, '0')
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`
+function formatDateTime(date: Date) {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const hh = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
 }
 
 function mapEvents(rawEvents: any[]): any[] {
@@ -62,6 +62,8 @@ function mapEvents(rawEvents: any[]): any[] {
     description: event.description,
     hostId: event.hostId ?? 1,
     picture: event.picture || "",
+    price: typeof event.price === "number" ? event.price : Number(event.price ?? 0),
+    date: event.date ?? event.eventDate ?? null,
     availableDiets: event.availableDiets
         ? event.availableDiets.split(",").map((diet: string) => diet.trim())
         : [],
@@ -93,15 +95,15 @@ const newEvent = ref({
   name: "",
   numTickets: 0,
   description: "",
-  availableDiets: [],
+  availableDiets: [] as string[],
   price: 0,
   picture: null as File | null,
 });
 
-function handleImageUpload(event: Event) {
-  const target = event.target as HTMLInputElement;
+function handleImageUpload(e: Event) {
+  const target = e.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
-    if (target.files[0].size > 16 * 1024 * 1024) { // groesser als erlaubt (16MB)
+    if (target.files[0].size > 16 * 1024 * 1024) {
       alert("Datei ist zu groß. Maximal erlaubt: 16 MB.");
       return;
     } else {
@@ -110,6 +112,34 @@ function handleImageUpload(event: Event) {
   }
 }
 
+// NEU: Auswahl eines Events -> Formular befüllen & Bearbeitungsmodus aktivieren
+function handleEventSelect(eventId: number) {
+  const ev = events.value.find((e) => e.id === eventId);
+  if (!ev) return;
+
+  console.log(ev)
+
+  selectedEventId.value = ev.id ?? null;
+
+  newEvent.value.name = ev.name ?? "";
+  newEvent.value.numTickets = ev.numTickets ?? 0;
+  newEvent.value.description = ev.description ?? "";
+  newEvent.value.availableDiets = Array.isArray(ev.availableDiets) ? [...ev.availableDiets] : [];
+  newEvent.value.price = typeof ev.price === "number" ? ev.price : Number(ev.price ?? 0);
+  newEvent.value.picture = null; // File kann nicht direkt aus URL gesetzt werden
+
+  if (ev.date) {
+    const d = new Date(ev.date);
+    if (!isNaN(d.getTime())) {
+      datum.value = formatDateTime(d);
+    }
+  }
+
+  createEvent.value = true; // gemäß Anforderung: true => "Event bearbeiten"/"Aktualisieren"
+  isDivCreateEventVisible.value = true;
+}
+
+// Bestehender Create-Request bleibt erhalten
 async function addEvent() {
   const errors = validateEventForm();
   if (errors.length > 0) {
@@ -125,48 +155,80 @@ async function addEvent() {
     formData.append("date", datum.value);
     formData.append("price", newEvent.value.price.toString());
     formData.append("availableDiets", newEvent.value.availableDiets.join(","));
-    formData.append("fk_host", "1"); // Beispiel: Host-ID auf 1 gesetzt
+    formData.append("fk_host", "1");
 
     if (newEvent.value.picture) {
       formData.append("picture", newEvent.value.picture);
     }
 
     await axios.post("http://localhost:8080/event", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: {"Content-Type": "multipart/form-data"},
     });
 
     alert("Event erfolgreich erstellt!");
-    window.location.reload(); // oder: Events neu laden
+    window.location.reload();
   } catch (err) {
     console.error("Fehler beim Hinzufügen:", err);
     alert("Fehler beim Erstellen des Events.");
+  }
+}
+
+// NEU: Einheitlicher Submit-Handler
+async function saveEvent() {
+  const errors = validateEventForm();
+  if (errors.length > 0) {
+    alert("Bitte fülle folgende Felder aus:\n- " + errors.join("\n- "));
+    return;
+  }
+
+  if (createEvent.value) {
+    // Kein DB-Update gewünscht: nur lokal updaten, damit es sichtbar ist
+    if (selectedEventId.value !== null) {
+      const idx = events.value.findIndex((e) => e.id === selectedEventId.value);
+      if (idx !== -1) {
+        const updated = {
+          ...events.value[idx],
+          name: newEvent.value.name,
+          numTickets: newEvent.value.numTickets,
+          description: newEvent.value.description,
+          availableDiets: [...newEvent.value.availableDiets],
+          price: newEvent.value.price,
+          date: datum.value,
+        };
+        events.value.splice(idx, 1, updated);
+      }
+    }
+    alert("Eventdaten aktualisiert (lokal, ohne DB-Update).");
+  } else {
+    await addEvent();
   }
 }
 </script>
 
 <template>
   <div class="p-6">
-
     <div class="mb-4">
       <!-- Accordion: Header -->
       <div
           class="cursor-pointer bg-white p-4 shadow flex items-center justify-between w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]"
           @click="toggleDivCreateEvent"
           role="button"
-          aria-expanded="isDivCreateEventVisible"
+          :aria-expanded="isDivCreateEventVisible"
           aria-controls="neues-event-panel"
       >
-        <h3 class="text-xl font-semibold">Neues Event anlegen</h3>
+        <!-- Titel abhängig von createEvent -->
+        <h3 class="text-xl font-semibold">
+          {{ createEvent ? "Event bearbeiten" : "Neues Event anlegen" }}
+        </h3>
         <svg
             class="w-5 h-5 transition-transform"
-            :class="{'rotate-180': isDivCreateEventVisible}"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            :class="{ 'rotate-180': isDivCreateEventVisible }"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
             aria-hidden="true"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
         </svg>
       </div>
 
@@ -176,11 +238,7 @@ async function addEvent() {
           id="neues-event-panel"
           class="bg-white shadow-lg p-5 transition mb-6 w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]"
       >
-        <form
-            @submit.prevent="addEvent"
-            @click.stop
-            class="w-full"
-        >
+        <form @submit.prevent="saveEvent" @click.stop class="w-full">
           <div class="grid">
             <input
                 v-model="newEvent.name"
@@ -227,8 +285,8 @@ async function addEvent() {
                 :options="dietOptions"
                 :is-multi="true"
                 placeholder="Diäten"
-                class="border mb-2 mt-2"
-                required
+                :reduce="opt => opt.value"
+                label="label"
             />
 
             <textarea
@@ -238,42 +296,53 @@ async function addEvent() {
                 required
             ></textarea>
 
-            <input
-                type="file"
-                @change="handleImageUpload"
-                accept="image/*"
-                class="p-2 mt-2 mb-2 border"
-            />
-          </div>
+            <div>
+              <input
+                  type="file"
+                  accept="image/*"
+                  @change="handleImageUpload"
+                  class="p-2 mt-2 mb-2 border
+             file:mr-4
+             file:py-2 file:px-4
+             file:cursor-pointer
+             file:bg-[#98743c] file:text-white file:hover:bg-[#7a5c56]
+             file:rounded-none
+             file:border-0
+             file:border-r
+             file:border-gray-300"
+              />
 
-          <button
-              type="submit"
-              class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer mt-6"
-          >
-            Hinzufügen
-          </button>
+              <!-- Button-Text abhängig von createEvent -->
+              <button
+                  type="submit"
+                  class="bg-[#98743c] hover:bg-[#7a5c56] text-white py-2 px-4 w-full cursor-pointer mt-6"
+              >
+                {{ createEvent ? "Aktualisieren" : "Hinzufügen" }}
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>
-
 
     <!-- Eventliste -->
     <div
         class="cursor-pointer bg-white p-4 shadow flex items-center justify-between w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]"
         @click="toggleDivShowEvents"
         role="button"
-        aria-expanded="isDivShowEventsVisible"
+        :aria-expanded="isDivShowEventsVisible"
         aria-controls="neues-event-panel"
     >
       <h3 class="text-xl font-semibold">Meine Events</h3>
       <svg
           class="w-5 h-5 transition-transform"
-          :class="{'rotate-180': isDivShowEventsVisible}"
-          fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          :class="{ 'rotate-180': isDivShowEventsVisible }"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
           aria-hidden="true"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 9l-7 7-7-7"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
       </svg>
     </div>
 
@@ -283,9 +352,11 @@ async function addEvent() {
         class="bg-white shadow-lg p-5 transition mb-6 w-full max-w-full mx-auto md:max-w-3xl lg:max-w-[60%]"
     >
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Tipp: router-link ohne :to kann navigieren wollen – Klick abfangen -->
         <div
             v-for="event in events"
             :key="event.id"
+            @click="handleEventSelect(event.id)"
             class="bg-[#fcedd7] no-underline block shadow-lg hover:shadow-[#5c3c26] p-5 transition rounded"
         >
           <h4 class="text-lg font-semibold mb-4">{{ event.name }}</h4>
@@ -298,7 +369,5 @@ async function addEvent() {
         </div>
       </div>
     </div>
-
   </div>
 </template>
-
